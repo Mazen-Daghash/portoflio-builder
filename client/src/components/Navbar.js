@@ -21,15 +21,12 @@ const Navbar = () => {
   }, [scrolled]);
 
   const scrollToSection = (e, path) => {
-    // If we're in admin, navigate to home first, then scroll
     if (location.pathname === '/admin') {
       e.preventDefault();
       if (path === '/') {
         return;
-      }
-      // Navigate to home first
+      }      
       navigate('/');
-      // Wait for navigation to complete, then scroll
       setTimeout(() => {
         if (path.startsWith('#')) {
           const element = document.querySelector(path);
@@ -51,6 +48,7 @@ const Navbar = () => {
   };
 
   const navItems = [
+    { name: 'Home', path: '#home', icon: <FiHome className="w-5 h-5" /> },
     { name: 'Projects', path: '#projects', icon: <FiBriefcase className="w-5 h-5" /> },
     { name: 'About', path: '#about', icon: <FiUser className="w-5 h-5" /> },
     { name: 'Contact', path: '#contact', icon: <FiMail className="w-5 h-5" /> },
