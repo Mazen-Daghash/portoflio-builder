@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiHome, FiUser, FiBriefcase, FiMail, FiSettings } from 'react-icons/fi';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,8 +20,37 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
 
+  const scrollToSection = (e, path) => {
+    // If we're in admin, navigate to home first, then scroll
+    if (location.pathname === '/admin') {
+      e.preventDefault();
+      if (path === '/') {
+        return;
+      }
+      // Navigate to home first
+      navigate('/');
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        if (path.startsWith('#')) {
+          const element = document.querySelector(path);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState({}, '', `/${path}`);
+          }
+        }
+      }, 100);
+    } 
+    else if (path.startsWith('#')) {
+      e.preventDefault();
+      const element = document.querySelector(path);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState({}, '', `${location.pathname}${path}`);
+      }
+    }
+  };
+
   const navItems = [
-    { name: 'Home', path: '/', icon: <FiHome className="w-5 h-5" /> },
     { name: 'Projects', path: '#projects', icon: <FiBriefcase className="w-5 h-5" /> },
     { name: 'About', path: '#about', icon: <FiUser className="w-5 h-5" /> },
     { name: 'Contact', path: '#contact', icon: <FiMail className="w-5 h-5" /> },
@@ -49,8 +79,10 @@ const Navbar = () => {
               <Link
                 key={item.name}
                 to={item.path}
+                onClick={(e) => scrollToSection(e, item.path)}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                  location.pathname === item.path
+                  location.pathname === item.path || 
+                  (item.path.startsWith('#') && location.hash === item.path)
                     ? 'text-primary font-medium'
                     : 'text-gray-600 hover:text-primary'
                 }`}
