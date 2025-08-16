@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/portoflio-builder/static/css/main.a233d7ba.css",
+    "main.js": "/portoflio-builder/static/js/main.c801bbd5.js",
+    "static/js/453.ed6adb66.chunk.js": "/portoflio-builder/static/js/453.ed6adb66.chunk.js",
+    "index.html": "/portoflio-builder/index.html",
+    "main.a233d7ba.css.map": "/portoflio-builder/static/css/main.a233d7ba.css.map",
+    "main.c801bbd5.js.map": "/portoflio-builder/static/js/main.c801bbd5.js.map",
+    "453.ed6adb66.chunk.js.map": "/portoflio-builder/static/js/453.ed6adb66.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a233d7ba.css",
+    "static/js/main.c801bbd5.js"
+  ]
+}
