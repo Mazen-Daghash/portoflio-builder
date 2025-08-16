@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const projectSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  technologies: [{ type: String }]
+  technologies: [{ type: String }],
+  image: { type: String },
+  github: { type: String },
+  demo: { type: String }
 });
 
 const experienceSchema = new mongoose.Schema({
@@ -11,9 +14,18 @@ const experienceSchema = new mongoose.Schema({
   position: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date },
-  description: { type: String, default: '' }
+  description: { type: String, default: '' },
+  skills: [{ type: String }]
 });
 
+const educationSchema = new mongoose.Schema({
+  institution: { type: String, required: true },
+  degree: { type: String, required: true },
+  field: { type: String, required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date },
+  description: { type: String }
+});
 
 const portfolioSchema = new mongoose.Schema({
   name: { 
@@ -31,11 +43,11 @@ const portfolioSchema = new mongoose.Schema({
     required: [true, 'About section is required'],
     trim: true
   },
-  
   social: {
     github: { type: String, default: '' },
     linkedin: { type: String, default: '' },
-    twitter: { type: String, default: '' }
+    twitter: { type: String, default: '' },
+    website: { type: String, default: '' }
   },
   skills: [{
     name: { 
@@ -47,7 +59,13 @@ const portfolioSchema = new mongoose.Schema({
       type: Number, 
       required: [true, 'Skill level is required'],
       min: [0, 'Skill level must be at least 0'],
-      max: [100, 'Skill level cannot exceed 100']
+      max: [100, 'Skill level cannot exceed 100'],
+      default: 70
+    },
+    category: {
+      type: String,
+      enum: ['frontend', 'backend', 'tools', 'other'],
+      default: 'other'
     }
   }],
   projects: [projectSchema],
@@ -91,6 +109,9 @@ portfolioSchema.pre('save', function(next) {
     }
     if (this.social.twitter && !this.social.twitter.startsWith('http')) {
       this.social.twitter = `https://twitter.com/${this.social.twitter.replace('@', '')}`;
+    }
+    if (this.social.website && !this.social.website.startsWith('http')) {
+      this.social.website = `https://${this.social.website}`;
     }
   }
   next();
